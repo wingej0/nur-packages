@@ -1,6 +1,24 @@
-{ autoPatchelfHook, buildFHSEnvChroot ? false, buildFHSUserEnv ? false, dpkg
-, fetchurl, lib, stdenv, sysctl, iptables, iproute2, procps, cacert, libxml2
-, libidn2, zlib, wireguard-tools }:
+{
+  autoPatchelfHook,
+  buildFHSEnvChroot ? false,
+  buildFHSUserEnv ? false,
+  dpkg,
+  fetchurl,
+  lib,
+  stdenv,
+  sysctl,
+  iptables,
+  iproute2,
+  procps,
+  cacert,
+  libxml2,
+  libidn2,
+  libnl,
+  libcap, 
+  libcap_ng,
+  zlib,
+  wireguard-tools,
+}:
 
 let
   pname = "nordvpn";
@@ -11,22 +29,30 @@ let
     github = "LuisChDev";
     githubId = 24978009;
   };
-  buildEnv = if builtins.typeOf buildFHSEnvChroot == "set" then
-    buildFHSEnvChroot
-  else
-    buildFHSUserEnv;
+  buildEnv =
+    if builtins.typeOf buildFHSEnvChroot == "set" then buildFHSEnvChroot else buildFHSUserEnv;
 
   nordVPNBase = stdenv.mkDerivation {
     inherit pname version;
 
     src = fetchurl {
-      url =
-        "https://repo.nordvpn.com/deb/nordvpn/debian/pool/main/nordvpn_${version}_amd64.deb";
-      hash = "sha256-6aAslJ2xwj+khF6HOMtkF0iclrUzhBV64xrHgs5Nc2s=";
+      url = "https://repo.nordvpn.com/deb/nordvpn/debian/pool/main/n/nordvpn/nordvpn_${version}_amd64.deb";
+      hash = "sha256-V8SM91Q+DJelrEEipcnwI3BAvput79U13U908u6tjMw=";
     };
 
-    buildInputs = [ libxml2 libidn2 ];
-    nativeBuildInputs = [ dpkg autoPatchelfHook stdenv.cc.cc.lib ];
+    buildInputs = [
+      libxml2
+      libidn2
+      libnl
+      libcap
+      libcap_ng
+    ];
+
+    nativeBuildInputs = [
+      dpkg
+      autoPatchelfHook
+      stdenv.cc.cc.lib
+    ];
 
     dontConfigure = true;
     dontBuild = true;
@@ -52,8 +78,8 @@ let
     runScript = "nordvpnd";
 
     # hardcoded path to /sbin/ip
-    targetPkgs = pkgs:
-      with pkgs; [
+    targetPkgs =
+      pkgs: with pkgs; [
         nordVPNBase
         sysctl
         iptables
@@ -67,7 +93,8 @@ let
       ];
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   dontUnpack = true;
@@ -88,7 +115,7 @@ in stdenv.mkDerivation {
     description = "CLI client for NordVPN";
     homepage = "https://www.nordvpn.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ LuisChDev ];
+    maintainers = with maintainers; [ wingej0 ];
     platforms = [ "x86_64-linux" ];
   };
 }
