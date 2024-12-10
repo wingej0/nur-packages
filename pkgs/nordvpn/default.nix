@@ -23,6 +23,12 @@
 let
   pname = "nordvpn";
   version = "3.19.2";
+  wingej0 = {
+    name = "Jeff Winget";
+    email = "wingej0@gmail.com";
+    github = "wingej0";
+    githubId = 19930583;
+  };
   buildEnv =
     if builtins.typeOf buildFHSEnvChroot == "set" then buildFHSEnvChroot else buildFHSUserEnv;
 
