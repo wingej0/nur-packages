@@ -10,15 +10,15 @@ To install NordVPN, you will need to import the NUR repository into your flake's
 
 ```nix
 {
-	inputs = {
-		nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-		# Nix User Repository
-		nur = {
-			url = "github:nix-community/NUR";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
-	];
+    # Nix User Repository
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  ];
 }
 ```
 
